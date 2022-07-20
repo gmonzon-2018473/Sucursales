@@ -1,0 +1,157 @@
+
+<div class="body fondo">
+    
+    <app-nav-bar></app-nav-bar>
+    <div class="d-flex justify-content-between mt-3">
+        <div></div>
+        <div></div>
+        <div>
+            <button class="buttonHome me-3 mt-1 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModalAddCompany" 
+                type="button">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Agregar 
+                </button>
+        </div>
+    </div>
+
+    <div class="empresas row">
+        <div *ngFor="let empresa of arrayCompanies" class="card me-3 mt-3 ms-3" style="width: 18rem;">
+            <img class="card-img-top" src="../../../assets/images/edificio.png" alt="Imagen Empresa">
+            <div class="card-body">
+                <h5 class="card-title"><strong>{{empresa.name}}</strong></h5>
+                <!-- Modal 1 -->
+                <button (click)="getCompany(empresa._id)" type="button" class="btn btn-link" data-bs-toggle="modal"
+                    data-bs-target="#exampleModalDeleteCompany"><img src="../../../assets/images/eliminar.png" alt="#"
+                        class="img-icon"></button>
+
+                <!-- Modal 2 -->
+                <button (click)="getCompany(empresa._id)" type="button" class="btn btn-link" data-bs-toggle="modal"
+                    data-bs-target="#exampleModalUpdateCompany"><img src="../../../assets/images/editar.png" alt="#"
+                        class="img-icon"></button>
+
+                <section class="section mt-2">
+                    <button [routerLink]="['/office/' + empresa._id]" type="button" class="btn btn-see" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Sucursales
+                    </button>
+                </section>
+                <section class="section mt-2">
+                    <button [routerLink]="['/companyProducts/' + empresa._id]" type="button" class="btn btn-see" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Productos
+                    </button> 
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <section class="functions">
+
+
+        <!-- Modal eliminar -->
+        <div class="modal fade" id="exampleModalDeleteCompany" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="container">
+                    <div class="modal-content">
+                        <div class="contact-box">
+                            <div class="left"></div>
+                            <div class="right">
+                                <div class="position-relative">
+                                    <button type="button"
+                                        class="btn-close position-absolute top-0 start-100 translate-middle"
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <h4>¿Está seguro de eliminar esta empresa?</h4>
+                                <button (click)="deleteCompany()" class="buttonModalNewUser mb-3" data-bs-dismiss="modal">Si</button>
+                                <button style="background: #F8333C;" class="buttonModalNewUser"
+                                    data-bs-dismiss="modal">No</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL PARA EDITAR UNA EMPRESA -->
+        <div class="modal fade" id="exampleModalUpdateCompany" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="container">
+                    <div class="modal-content">
+                        <div class="contact-box">
+                            <div class="left"></div>
+                            <div class="right">
+                                <div class="position-relative">
+                                    <button type="button"
+                                        class="btn-close position-absolute top-0 start-100 translate-middle"
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <h2>Editar</h2>
+                                <input [(ngModel)]="this.companyUpdate.name" name="name" type="text" class="field" placeholder="Name">
+                                <select [(ngModel)]="this.companyUpdate.typeCompany" name="opciones" class="form-select field" aria-label="Default select example" >
+                                    <option value="Equipo Local" disabled selected>Tipo Empresa</option>
+                                    <option value="Restaurante">Restaurante</option>
+                                    <option value="Tecnológica">Tecnológica</option>
+                                    <option value="Supermercado">Supermercado</option>
+                                    <option value="Deportiva">Deportiva</option>
+                                    <option value="Boutique">Boutique</option>
+                                </select>
+                                <input [(ngModel)]="this.companyUpdate.location" name="location" type="text" class="field" placeholder="Municipio de Guatemala">
+                                <input [(ngModel)]="this.companyUpdate.phone" name="phone" type="text" class="field" placeholder="Teléfono">
+                                <input [(ngModel)]="this.companyUpdate.email" name="email" type="text" class="field" placeholder="Correo Electrónico">
+                                <input [(ngModel)]="this.companyUpdate.userCompany" name="user" type="text" class="field" placeholder="User">
+                                
+                                <button (click)="updateCompany()" class="buttonModalNewUser" data-bs-dismiss="modal">Actualizar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para agregar una empresa -->
+
+        <div class="modal fade" id="exampleModalAddCompany" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="container">
+                    <div class="modal-content">
+                        <div class="contact-box">
+                            <div class="left"></div>
+                            <div class="right">
+                                <div class="position-relative">
+                                    <button (click)="resetForm(addCompanyForm)" type="button" class="btn-close position-absolute top-0 start-100 translate-middle" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <h2>Agregar Empresa</h2>
+                                <form #addCompanyForm>
+                                    <input [(ngModel)]="company.name" name="name" type="text" class="field" placeholder="Name">
+                                    <select [(ngModel)]="company.typeCompany" name="type" class="form-select field" aria-label="Default select example" >
+                                        <option value="Equipo Local" disabled selected>Tipo Empresa</option>
+                                        <option value="Restaurante">Restaurante</option>
+                                        <option value="Tecnológica">Tecnológica</option>
+                                        <option value="Supermercado">Supermercado</option>
+                                        <option value="Deportiva">Deportiva</option>
+                                        <option value="Boutique">Boutique</option>
+                                    </select>
+                                    <input [(ngModel)]="company.location" name="location" type="text" class="field" placeholder="Municipio de Guatemala">
+                                    <input [(ngModel)]="company.phone" name="telefono" type="text" class="field" placeholder="Teléfono">
+                                    <input [(ngModel)]="company.email" name="email" type="text" class="field" placeholder="Correo Electrónico">
+                                    <input [(ngModel)]="company.userCompany" name="user" type="text" class="field" placeholder="User">
+                                    <input [(ngModel)]="company.passwordCompany" name="password" type="password" class="field" placeholder="Password">
+                                    <button (click)="addCompany()" class="btnAddCompany" data-bs-dismiss="modal">Guardar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <br>
+
+
+
+</div>
